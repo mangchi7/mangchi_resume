@@ -58,6 +58,7 @@ function CareerSection({ onScrollUp, isActive }) {
     if (!content) return;
 
     let isTransitioning = false;
+    let touchStartY = 0;
 
     const handleWheel = (e) => {
       if (isTransitioning) {
@@ -79,10 +80,36 @@ function CareerSection({ onScrollUp, isActive }) {
       }
     };
 
+    const handleTouchStart = (e) => {
+      touchStartY = e.touches[0].clientY;
+    };
+
+    const handleTouchEnd = (e) => {
+      if (isTransitioning) return;
+
+      const touchEndY = e.changedTouches[0].clientY;
+      const deltaY = touchStartY - touchEndY;
+      const scrollTop = content.scrollTop;
+      const isAtTop = scrollTop <= 1;
+
+      // Swipe down at top (scroll up to previous section)
+      if (deltaY < -50 && isAtTop && onScrollUp) {
+        isTransitioning = true;
+        onScrollUp();
+        setTimeout(() => {
+          isTransitioning = false;
+        }, 1000);
+      }
+    };
+
     content.addEventListener('wheel', handleWheel, { passive: false });
+    content.addEventListener('touchstart', handleTouchStart, { passive: true });
+    content.addEventListener('touchend', handleTouchEnd, { passive: true });
 
     return () => {
       content.removeEventListener('wheel', handleWheel);
+      content.removeEventListener('touchstart', handleTouchStart);
+      content.removeEventListener('touchend', handleTouchEnd);
     };
   }, [isActive, onScrollUp]);
 
@@ -109,9 +136,9 @@ function CareerSection({ onScrollUp, isActive }) {
         }}
       >
         {/* Section Label - Top Right */}
-        <div className="absolute top-8 right-8 text-right z-10">
-          <p className="text-apple-gray-400 text-sm font-medium tracking-widest uppercase mb-1">Section 03</p>
-          <h2 className="text-3xl md:text-4xl font-bold text-apple-gray-900">Career</h2>
+        <div className="absolute top-4 md:top-8 right-4 md:right-8 text-right z-10">
+          <p className="text-apple-gray-400 text-xs md:text-sm font-medium tracking-widest uppercase mb-1">Section 03</p>
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-apple-gray-900">Career</h2>
         </div>
 
         <div className="container mx-auto px-6 py-20 max-w-6xl mt-16">
@@ -126,16 +153,16 @@ function CareerSection({ onScrollUp, isActive }) {
                   className={`bg-gradient-to-br ${career.color} rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden`}
                 >
                   {/* Header - Always Visible */}
-                  <div className="p-6 md:p-8">
-                    <div className="flex items-start justify-between mb-3">
+                  <div className="p-4 md:p-6 lg:p-8">
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
                       <div className="flex-1">
-                        <h3 className="text-2xl md:text-3xl font-bold text-apple-gray-900 mb-2">
+                        <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-apple-gray-900 mb-2">
                           {career.company}
                         </h3>
-                        <p className="text-lg font-semibold text-apple-gray-700 mb-2">{career.role}</p>
+                        <p className="text-base md:text-lg font-semibold text-apple-gray-700 mb-2">{career.role}</p>
                       </div>
-                      <div className="flex items-center gap-3 ml-4">
-                        <span className="text-apple-gray-600 font-medium bg-white px-4 py-2 rounded-full text-sm whitespace-nowrap">
+                      <div className="flex items-center gap-3">
+                        <span className="text-apple-gray-600 font-medium bg-white px-3 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm whitespace-nowrap">
                           {career.period}
                         </span>
                         <button
@@ -161,7 +188,7 @@ function CareerSection({ onScrollUp, isActive }) {
                         </button>
                       </div>
                     </div>
-                    <p className="text-apple-gray-600 leading-relaxed">{career.description}</p>
+                    <p className="text-sm md:text-base text-apple-gray-600 leading-relaxed">{career.description}</p>
                   </div>
 
                   {/* Expandable Content */}
@@ -171,11 +198,11 @@ function CareerSection({ onScrollUp, isActive }) {
                     }`}
                     style={{ overflow: 'hidden' }}
                   >
-                    <div className="px-6 md:px-8 pb-6 md:pb-8">
+                    <div className="px-4 md:px-6 lg:px-8 pb-4 md:pb-6 lg:pb-8">
                       {/* Achievements */}
                       <div className="mb-6">
-                        <h4 className="text-xl font-bold text-apple-gray-900 mb-4 flex items-center">
-                          <svg className="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <h4 className="text-lg md:text-xl font-bold text-apple-gray-900 mb-4 flex items-center">
+                          <svg className="w-5 h-5 md:w-6 md:h-6 mr-2" fill="currentColor" viewBox="0 0 20 20">
                             <path
                               fillRule="evenodd"
                               d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -184,22 +211,22 @@ function CareerSection({ onScrollUp, isActive }) {
                           </svg>
                           주요 성과
                         </h4>
-                        <ul className="space-y-3">
+                        <ul className="space-y-2 md:space-y-3">
                           {career.achievements.map((achievement, achIdx) => (
                             <li key={achIdx} className="flex items-start">
-                              <span className="text-apple-gray-500 mr-3 mt-1">▪</span>
-                              <span className="text-apple-gray-700 leading-relaxed">{achievement}</span>
+                              <span className="text-apple-gray-500 mr-2 md:mr-3 mt-1 text-sm">▪</span>
+                              <span className="text-sm md:text-base text-apple-gray-700 leading-relaxed">{achievement}</span>
                             </li>
                           ))}
                         </ul>
                       </div>
 
                       {/* Tags */}
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-1.5 md:gap-2">
                         {career.tags.map((tag, tagIdx) => (
                           <span
                             key={tagIdx}
-                            className="px-4 py-2 bg-white text-apple-gray-700 rounded-full text-sm font-medium shadow-sm hover:shadow-md transition-shadow duration-200"
+                            className="px-3 md:px-4 py-1.5 md:py-2 bg-white text-apple-gray-700 rounded-full text-xs md:text-sm font-medium shadow-sm hover:shadow-md transition-shadow duration-200"
                           >
                             {tag}
                           </span>

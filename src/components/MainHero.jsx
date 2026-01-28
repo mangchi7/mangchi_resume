@@ -59,7 +59,7 @@ function MainHero({ onScrollDown, isActive }) {
     }
   }, [currentPhase]);
 
-  // Handle wheel event to scroll to next section
+  // Handle wheel and touch events to scroll to next section
   useEffect(() => {
     if (!isActive) return;
 
@@ -67,6 +67,8 @@ function MainHero({ onScrollDown, isActive }) {
     if (!section) return;
 
     let isTransitioning = false;
+    let touchStartY = 0;
+    let touchEndY = 0;
 
     const handleWheel = (e) => {
       if (isTransitioning) {
@@ -84,10 +86,39 @@ function MainHero({ onScrollDown, isActive }) {
       }
     };
 
+    const handleTouchStart = (e) => {
+      touchStartY = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e) => {
+      touchEndY = e.touches[0].clientY;
+    };
+
+    const handleTouchEnd = () => {
+      if (isTransitioning) return;
+
+      const deltaY = touchStartY - touchEndY;
+
+      // Swipe up (scroll down)
+      if (deltaY > 50 && onScrollDown) {
+        isTransitioning = true;
+        onScrollDown();
+        setTimeout(() => {
+          isTransitioning = false;
+        }, 1000);
+      }
+    };
+
     section.addEventListener('wheel', handleWheel, { passive: false });
+    section.addEventListener('touchstart', handleTouchStart, { passive: true });
+    section.addEventListener('touchmove', handleTouchMove, { passive: true });
+    section.addEventListener('touchend', handleTouchEnd, { passive: true });
 
     return () => {
       section.removeEventListener('wheel', handleWheel);
+      section.removeEventListener('touchstart', handleTouchStart);
+      section.removeEventListener('touchmove', handleTouchMove);
+      section.removeEventListener('touchend', handleTouchEnd);
     };
   }, [isActive, onScrollDown]);
 
@@ -100,20 +131,54 @@ function MainHero({ onScrollDown, isActive }) {
     >
       {/* Section Label - Top Right */}
       
-      <div className="container mx-auto px-6 text-center">
+      <div className="container mx-auto px-6 text-center relative">
+        {/* Background Text - FULL-STACK */}
+        {currentPhase === 2 && (
+          <div className="absolute left-0 right-0 flex items-center justify-center pointer-events-none overflow-hidden" style={{ zIndex: 0, top: 'clamp(-30px, -3vw, -48px)' }}>
+            <span
+              className="font-bold text-apple-gray-900 whitespace-nowrap select-none"
+              style={{
+                fontSize: 'clamp(3rem, 15vw, 12rem)',
+                opacity: 0.08,
+                letterSpacing: '0.05em'
+              }}
+            >
+              FULL-STACK
+            </span>
+          </div>
+        )}
+
         {/* Typing Text */}
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-apple-gray-900 mb-12 h-24 md:h-32 flex items-center justify-center whitespace-pre-line">
+        <h1 className="relative z-10 text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-apple-gray-900 mb-8 md:mb-12 min-h-[120px] md:min-h-[160px] flex items-center justify-center px-4" style={{ paddingTop: 'clamp(2rem, 5vw, 5rem)' }}>
           <span className={currentPhase < 2 ? 'typing-cursor' : ''}>
-            {displayText}
+            {currentPhase === 2 ? (
+              <>
+                {displayText.slice(0, 7)}
+                {displayText.length > 7 && (
+                  <span
+                    className="font-extrabold"
+                    style={{
+                      backgroundSize: '100% 100%',
+                      backgroundImage: 'linear-gradient(transparent 80%, rgb(20, 230, 190) 20%)',
+                    }}
+                  >
+                    {displayText.slice(7, 10)}
+                  </span>
+                )}
+                {displayText.slice(10)}
+              </>
+            ) : (
+              displayText
+            )}
           </span>
         </h1>
 
         {/* Profile Image */}
-        <div className={`mb-8 inline-block ${showSecondary ? 'scale-in' : 'opacity-0'}`}>
+        <div className={`relative z-10 mb-8 inline-block ${showSecondary ? 'scale-in' : 'opacity-0'}`}>
           <img
             src={profileImage}
             alt="서명세"
-            className="w-48 md:w-64 lg:w-80 object-contain mx-auto"
+            className="w-40 sm:w-48 md:w-64 lg:w-80 object-contain mx-auto"
           />
         </div>
 

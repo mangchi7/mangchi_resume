@@ -59,6 +59,8 @@ function AboutMe({ onScrollUp, onScrollDown, isActive }) {
     if (!content) return;
 
     let isTransitioning = false;
+    let touchStartY = 0;
+    let touchStartScrollTop = 0;
 
     const handleWheel = (e) => {
       if (isTransitioning) {
@@ -92,10 +94,48 @@ function AboutMe({ onScrollUp, onScrollDown, isActive }) {
       }
     };
 
+    const handleTouchStart = (e) => {
+      touchStartY = e.touches[0].clientY;
+      touchStartScrollTop = content.scrollTop;
+    };
+
+    const handleTouchEnd = (e) => {
+      if (isTransitioning) return;
+
+      const touchEndY = e.changedTouches[0].clientY;
+      const deltaY = touchStartY - touchEndY;
+      const scrollTop = content.scrollTop;
+      const scrollHeight = content.scrollHeight;
+      const clientHeight = content.clientHeight;
+      const isAtTop = scrollTop <= 1;
+      const isAtBottom = Math.abs(scrollHeight - clientHeight - scrollTop) < 5;
+
+      // Swipe up at bottom (scroll down to next section)
+      if (deltaY > 50 && isAtBottom && onScrollDown) {
+        isTransitioning = true;
+        onScrollDown();
+        setTimeout(() => {
+          isTransitioning = false;
+        }, 1000);
+      }
+      // Swipe down at top (scroll up to previous section)
+      else if (deltaY < -50 && isAtTop && onScrollUp) {
+        isTransitioning = true;
+        onScrollUp();
+        setTimeout(() => {
+          isTransitioning = false;
+        }, 1000);
+      }
+    };
+
     content.addEventListener('wheel', handleWheel, { passive: false });
+    content.addEventListener('touchstart', handleTouchStart, { passive: true });
+    content.addEventListener('touchend', handleTouchEnd, { passive: true });
 
     return () => {
       content.removeEventListener('wheel', handleWheel);
+      content.removeEventListener('touchstart', handleTouchStart);
+      content.removeEventListener('touchend', handleTouchEnd);
     };
   }, [isActive, onScrollUp, onScrollDown]);
 
@@ -115,15 +155,15 @@ function AboutMe({ onScrollUp, onScrollDown, isActive }) {
         }}
       >
         {/* Section Label - Top Right */}
-        <div className="absolute top-8 right-8 text-right z-10">
-          <p className="text-apple-gray-400 text-sm font-medium tracking-widest uppercase mb-1">Section 02</p>
-          <h2 className="text-3xl md:text-4xl font-bold text-apple-gray-900">About Me</h2>
+        <div className="absolute top-4 md:top-8 right-4 md:right-8 text-right z-10">
+          <p className="text-apple-gray-400 text-xs md:text-sm font-medium tracking-widest uppercase mb-1">Section 02</p>
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-apple-gray-900">About Me</h2>
         </div>
 
         <div className="container mx-auto px-6 py-20 max-w-5xl mt-16">
           {/* Introduction */}
           <div className="mb-16 fade-in-delay-1">
-            <p className="text-xl md:text-2xl text-center text-apple-gray-700 leading-relaxed max-w-3xl mx-auto">
+            <p className="text-lg md:text-xl lg:text-2xl text-center text-apple-gray-700 leading-relaxed max-w-3xl mx-auto px-4">
               10년차 풀스택 개발자로, 금융권에서 프리랜서로 일해왔습니다.
               빠른 의사결정과 실행력을 바탕으로 비즈니스 임팩트를 만드는 것에 관심이 많으며,
               기술 부채 관리와 팀 생산성 향상에도 기여해왔습니다.
@@ -132,23 +172,23 @@ function AboutMe({ onScrollUp, onScrollDown, isActive }) {
           </div>
 
           {/* Basic Info */}
-          <div className="mb-16 fade-in-delay-2">
-            <h3 className="text-3xl font-bold text-apple-gray-900 mb-8 text-center">기본 정보</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
+          <div className="mb-16 fade-in-delay-2 px-4">
+            <h3 className="text-2xl md:text-3xl font-bold text-apple-gray-900 mb-6 md:mb-8 text-center">기본 정보</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 max-w-3xl mx-auto">
               {info.map((item, idx) => (
-                <div key={idx} className="bg-apple-gray-50 rounded-xl p-6">
-                  <p className="text-apple-gray-600 text-sm mb-2">{item.label}</p>
+                <div key={idx} className="bg-apple-gray-50 rounded-xl p-4 md:p-6">
+                  <p className="text-apple-gray-600 text-xs md:text-sm mb-1 md:mb-2">{item.label}</p>
                   {item.link ? (
                     <a
                       href={item.link}
                       target={item.link.startsWith('http') ? '_blank' : undefined}
                       rel={item.link.startsWith('http') ? 'noopener noreferrer' : undefined}
-                      className="text-apple-gray-900 font-semibold text-lg hover:text-apple-gray-600 transition-colors"
+                      className="text-apple-gray-900 font-semibold text-base md:text-lg hover:text-apple-gray-600 transition-colors break-all"
                     >
                       {item.value}
                     </a>
                   ) : (
-                    <p className="text-apple-gray-900 font-semibold text-lg">{item.value}</p>
+                    <p className="text-apple-gray-900 font-semibold text-base md:text-lg">{item.value}</p>
                   )}
                 </div>
               ))}
@@ -156,17 +196,17 @@ function AboutMe({ onScrollUp, onScrollDown, isActive }) {
           </div>
 
           {/* Skills */}
-          <div className="mb-16 fade-in-delay-3">
-            <h3 className="text-3xl font-bold text-apple-gray-900 mb-8 text-center">기술 스택</h3>
-            <div className="space-y-8">
+          <div className="mb-16 fade-in-delay-3 px-4">
+            <h3 className="text-2xl md:text-3xl font-bold text-apple-gray-900 mb-6 md:mb-8 text-center">기술 스택</h3>
+            <div className="space-y-6 md:space-y-8">
               {Object.entries(skills).map(([category, icons], idx) => (
                 <div key={idx} className="text-center">
-                  <h4 className="text-xl font-semibold text-apple-gray-700 mb-4">{category}</h4>
-                  <div className="flex flex-wrap justify-center gap-6">
+                  <h4 className="text-lg md:text-xl font-semibold text-apple-gray-700 mb-3 md:mb-4">{category}</h4>
+                  <div className="flex flex-wrap justify-center gap-4 md:gap-6">
                     {icons.map((icon, iconIdx) => (
                       <div
                         key={iconIdx}
-                        className="w-12 h-12 md:w-16 md:h-16 hover:scale-110 transition-transform duration-300"
+                        className="w-10 h-10 md:w-12 md:h-12 lg:w-16 lg:h-16 hover:scale-110 transition-transform duration-300"
                       >
                         <img src={icon} alt={`${category} icon ${iconIdx}`} className="w-full h-full object-contain" />
                       </div>
@@ -178,16 +218,16 @@ function AboutMe({ onScrollUp, onScrollDown, isActive }) {
           </div>
 
           {/* Education & Certifications */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mb-16 px-4">
             {/* Education */}
             <div>
-              <h3 className="text-2xl font-bold text-apple-gray-900 mb-6">학력</h3>
-              <div className="space-y-4">
+              <h3 className="text-xl md:text-2xl font-bold text-apple-gray-900 mb-4 md:mb-6">학력</h3>
+              <div className="space-y-3 md:space-y-4">
                 {education.map((edu, idx) => (
-                  <div key={idx} className="bg-apple-gray-50 rounded-xl p-6">
-                    <h4 className="font-semibold text-apple-gray-900 mb-2">{edu.school}</h4>
-                    <p className="text-apple-gray-600 text-sm mb-1">{edu.period}</p>
-                    <p className="text-apple-gray-700">{edu.degree}</p>
+                  <div key={idx} className="bg-apple-gray-50 rounded-xl p-4 md:p-6">
+                    <h4 className="font-semibold text-apple-gray-900 mb-2 text-sm md:text-base">{edu.school}</h4>
+                    <p className="text-apple-gray-600 text-xs md:text-sm mb-1">{edu.period}</p>
+                    <p className="text-apple-gray-700 text-sm md:text-base">{edu.degree}</p>
                   </div>
                 ))}
               </div>
@@ -195,12 +235,12 @@ function AboutMe({ onScrollUp, onScrollDown, isActive }) {
 
             {/* Certifications */}
             <div>
-              <h3 className="text-2xl font-bold text-apple-gray-900 mb-6">자격증</h3>
-              <div className="space-y-4">
+              <h3 className="text-xl md:text-2xl font-bold text-apple-gray-900 mb-4 md:mb-6">자격증</h3>
+              <div className="space-y-3 md:space-y-4">
                 {certifications.map((cert, idx) => (
-                  <div key={idx} className="bg-apple-gray-50 rounded-xl p-6 flex justify-between items-center">
-                    <h4 className="font-semibold text-apple-gray-900">{cert.name}</h4>
-                    <span className="text-apple-gray-600 text-sm bg-white px-3 py-1 rounded-full">
+                  <div key={idx} className="bg-apple-gray-50 rounded-xl p-4 md:p-6 flex justify-between items-center">
+                    <h4 className="font-semibold text-apple-gray-900 text-sm md:text-base">{cert.name}</h4>
+                    <span className="text-apple-gray-600 text-xs md:text-sm bg-white px-2 md:px-3 py-1 rounded-full whitespace-nowrap ml-2">
                       {cert.date}
                     </span>
                   </div>
