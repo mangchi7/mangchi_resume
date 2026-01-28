@@ -6,7 +6,9 @@
       "Bash(npm run dev:*)",
       "Bash(git add:*)",
       "Bash(git commit -m \"$\\(cat <<''EOF''\nInitial commit: 이력서 웹페이지 프로젝트 설정\n\nReact와 Tailwind CSS를 사용한 포트폴리오 웹사이트를 생성했습니다.\n- 메인 히어로, About Me, Career 섹션 구현\n- Apple 스타일의 디자인 적용\n- 스크롤 트랜지션 효과 추가\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(npm run deploy:*)",
+      "Bash(git fetch:*)"
     ]
   }
 }
