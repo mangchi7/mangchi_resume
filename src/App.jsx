@@ -3,13 +3,14 @@ import Navigation from './components/Navigation';
 import MainHero from './components/MainHero';
 import AboutMe from './components/AboutMe';
 import CareerSection from './components/CareerSection';
+import Thanks from './components/Thanks';
 
 function App() {
   const [currentSection, setCurrentSection] = useState(0);
   const isTransitioning = useRef(false);
 
   const goToSection = (index) => {
-    if (index >= 0 && index <= 2 && !isTransitioning.current) {
+    if (index >= 0 && index <= 3 && !isTransitioning.current) {
       isTransitioning.current = true;
       setCurrentSection(index);
       setTimeout(() => {
@@ -36,7 +37,12 @@ function App() {
         />
         <CareerSection
           onScrollUp={() => goToSection(1)}
+          onScrollDown={() => goToSection(3)}
           isActive={currentSection === 2}
+        />
+        <Thanks
+          onScrollUp={() => goToSection(2)}
+          isActive={currentSection === 3}
         />
       </div>
     </div>

@@ -287,10 +287,10 @@ function AboutMe({ onScrollUp, onScrollDown, isActive }) {
           </div>
 
           {/* Scroll Indicator */}
-          <div className="text-center pb-3 pt-4 md:pb-4 md:pt-6 lg:pb-6 lg:pt-8">
-            <div className="inline-flex flex-col items-center text-apple-gray-600">
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 fade-in-delay-2">
+            <div className="flex flex-col items-center text-apple-gray-600">
               <svg
-                className="w-5 h-5 md:w-6 md:h-6 animate-bounce"
+                className="w-6 h-6 animate-bounce"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

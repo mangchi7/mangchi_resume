@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-function CareerSection({ onScrollUp, isActive }) {
+function CareerSection({ onScrollUp, onScrollDown, isActive }) {
   const contentRef = useRef(null);
   const [selectedCareer, setSelectedCareer] = useState(null);
 
@@ -130,10 +130,22 @@ function CareerSection({ onScrollUp, isActive }) {
       }
 
       const scrollTop = content.scrollTop;
+      const scrollHeight = content.scrollHeight;
+      const clientHeight = content.clientHeight;
       const isAtTop = scrollTop <= 1;
+      const isAtBottom = Math.abs(scrollHeight - clientHeight - scrollTop) < 5;
 
+      // Scrolling down at bottom
+      if (e.deltaY > 0 && isAtBottom && onScrollDown) {
+        e.preventDefault();
+        isTransitioning = true;
+        onScrollDown();
+        setTimeout(() => {
+          isTransitioning = false;
+        }, 1000);
+      }
       // Scrolling up at top
-      if (e.deltaY < 0 && isAtTop && onScrollUp) {
+      else if (e.deltaY < 0 && isAtTop && onScrollUp) {
         e.preventDefault();
         isTransitioning = true;
         onScrollUp();
@@ -153,10 +165,21 @@ function CareerSection({ onScrollUp, isActive }) {
       const touchEndY = e.changedTouches[0].clientY;
       const deltaY = touchStartY - touchEndY;
       const scrollTop = content.scrollTop;
+      const scrollHeight = content.scrollHeight;
+      const clientHeight = content.clientHeight;
       const isAtTop = scrollTop <= 1;
+      const isAtBottom = Math.abs(scrollHeight - clientHeight - scrollTop) < 5;
 
+      // Swipe up at bottom (scroll down to next section)
+      if (deltaY > 50 && isAtBottom && onScrollDown) {
+        isTransitioning = true;
+        onScrollDown();
+        setTimeout(() => {
+          isTransitioning = false;
+        }, 1000);
+      }
       // Swipe down at top (scroll up to previous section)
-      if (deltaY < -50 && isAtTop && onScrollUp) {
+      else if (deltaY < -50 && isAtTop && onScrollUp) {
         isTransitioning = true;
         onScrollUp();
         setTimeout(() => {
@@ -174,7 +197,7 @@ function CareerSection({ onScrollUp, isActive }) {
       content.removeEventListener('touchstart', handleTouchStart);
       content.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [isActive, onScrollUp]);
+  }, [isActive, onScrollUp, onScrollDown]);
 
   const openModal = (career) => {
     setSelectedCareer(career);
@@ -266,14 +289,11 @@ function CareerSection({ onScrollUp, isActive }) {
             ))}
           </div>
 
-          {/* Back to Top */}
-          <div className="text-center mt-8 md:mt-12 lg:mt-16 pb-6 md:pb-8">
-            <button
-              onClick={() => onScrollUp && onScrollUp()}
-              className="inline-flex items-center gap-2 text-apple-gray-600 hover:text-apple-gray-900 transition-colors text-sm md:text-base lg:text-lg font-medium cursor-pointer"
-            >
+          {/* Scroll Indicator */}
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 fade-in-delay-2">
+            <div className="flex flex-col items-center text-apple-gray-600">
               <svg
-                className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6"
+                className="w-6 h-6 animate-bounce"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -282,11 +302,10 @@ function CareerSection({ onScrollUp, isActive }) {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M5 10l7-7m0 0l7 7m-7-7v18"
+                  d="M19 14l-7 7m0 0l-7-7m7 7V3"
                 />
               </svg>
-              Back to Top
-            </button>
+            </div>
           </div>
         </div>
       </div>
