@@ -163,68 +163,69 @@ function AboutMe({ onScrollUp, onScrollDown, isActive }) {
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-apple-gray-900">About Me</h2>
         </div>
 
-        <div className="container mx-auto px-6 py-20 max-w-7xl mt-16">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="container mx-auto px-4 md:px-8 lg:px-12 xl:px-16 py-8 md:py-12 max-w-[95%] xl:max-w-[85%] 2xl:max-w-[1800px] mt-6 md:mt-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 xl:gap-16 items-center">
             {/* Left Column - Character Image */}
-            <div className="flex flex-col items-center justify-center fade-in-delay-1 space-y-8">
+            <div className="flex flex-col items-center justify-center fade-in-delay-1 space-y-3 md:space-y-4 lg:space-y-6">
               <div className="relative">
                 <img
                   src={characterImage}
                   alt="Character"
-                  className="w-64 h-64 md:w-80 md:h-80 object-contain"
+                  className="w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 xl:w-[28rem] xl:h-[28rem] 2xl:w-[32rem] 2xl:h-[32rem] object-contain"
                 />
               </div>
 
               {/* Hashtags */}
-              <div className="flex flex-wrap gap-3 justify-center">
+              <div className="flex flex-wrap gap-2 md:gap-3 justify-center">
                 {hashtags.map((tag, idx) => (
                   <span
                     key={idx}
-                    className="px-4 py-2 bg-apple-gray-900 text-white rounded-full text-sm font-medium hover:bg-apple-gray-700 transition-colors"
+                    className="px-3 py-1.5 md:px-4 md:py-2 bg-apple-gray-900 text-white rounded-full text-xs md:text-sm xl:text-base font-medium hover:bg-apple-gray-700 transition-colors"
                   >
                     {tag}
                   </span>
                 ))}
               </div>
 
-              {/* Link Button */}
+              {/* Link Button 
               <a
                 href="https://github.com/mangchi7"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-8 py-3 bg-apple-gray-900 text-white rounded-full font-semibold hover:bg-apple-gray-700 transition-all duration-300 shadow-lg"
+                className="inline-flex items-center gap-2 px-6 py-2.5 md:px-8 md:py-3 bg-apple-gray-900 text-white rounded-full text-sm md:text-base font-semibold hover:bg-apple-gray-700 transition-all duration-300 shadow-lg"
               >
                 링크 바로 보기
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </a>
+              */}
             </div>
 
             {/* Right Column - Content */}
-            <div className="text-apple-gray-900 space-y-12 fade-in-delay-2">
+            <div className="text-apple-gray-900 space-y-4 md:space-y-6 lg:space-y-8 fade-in-delay-2">
               {/* Mind Section */}
               <div>
-                <h3 className="text-3xl md:text-4xl font-bold mb-6 text-apple-gray-900">마음가짐</h3>
-                <div className="space-y-6">
+                <h3 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold mb-3 md:mb-4 lg:mb-5 text-apple-gray-900">마음가짐</h3>
+                <div className="space-y-3 md:space-y-4 lg:space-y-5">
                   <div>
-                    <p className="text-lg md:text-xl text-apple-gray-700 leading-relaxed mb-4">
+                    <p className="text-sm md:text-base lg:text-lg xl:text-xl text-apple-gray-700 leading-relaxed mb-2">
                       <span className="font-semibold text-apple-gray-900">끈기와 인내심</span>
                     </p>
-                    <p className="text-base text-apple-gray-600 leading-relaxed">
+                    <p className="text-xs md:text-sm lg:text-base text-apple-gray-600 leading-relaxed">
                       마지막까지 끈기와 인내심이 필요한 마라톤을 취미로 즐기고 있습니다.<br/>
-                      그래서 개발 중 예상치 못한 문제가 발생하더라도 포기하지 않고 끝까지 해결해 완료하는 것을 중요하게 생각합니다.<br/>
-                      과정은 쉽지 않지만 완주하듯 결과를 만들어냈을 때 느끼는 성취감을 중요하게 생각합니다.<br/>
+                      그래서 개발 중 예상치 못한 문제가 발생하더라도 <span className="font-bold text-apple-gray-900">포기하지 않고 끝까지 해결해 완료하는 것</span>을 중요하게 생각합니다.<br/>
+                      과정은 쉽지 않지만 완주하듯 결과를 만들어냈을 때 느끼는 성취감을 중요하게 생각합니다.
                     </p>
                   </div>
 
                   <div>
-                    <p className="text-lg md:text-xl text-apple-gray-700 leading-relaxed mb-4">
+                    <p className="text-sm md:text-base lg:text-lg xl:text-xl text-apple-gray-700 leading-relaxed mb-2">
                       <span className="font-semibold text-apple-gray-900">팀보다 위대한 선수는 없다.</span>
                     </p>
-                    <p className="text-base text-apple-gray-600 leading-relaxed">
+                    <p className="text-xs md:text-sm lg:text-base text-apple-gray-600 leading-relaxed">
                       아무리 뛰어난 개인이라도 혼자서는 한계가 있다고 생각합니다.<br/>
-                      여러 사람이 함께 고민하고 방향을 맞춰가는 집단지성의 과정 속에서 더 나은 결과가 나온다고 믿습니다.<br/>
+                      여러 사람이 함께 고민하고 방향을 맞춰가는 <span className="font-bold text-apple-gray-900">집단지성</span>의 과정 속에서 더 나은 결과가 나온다고 믿습니다.<br/>
                       저는 팀 안에서 원활한 소통과 역할 조율을 통해 시너지를 만들어내는 협업 중심의 개발자입니다.
                     </p>
                   </div>
@@ -233,16 +234,16 @@ function AboutMe({ onScrollUp, onScrollDown, isActive }) {
 
               {/* Skill & Tools Section */}
               <div>
-                <h3 className="text-3xl md:text-4xl font-bold mb-8 text-apple-gray-900">기술 스택</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <h3 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold mb-3 md:mb-4 lg:mb-5 text-apple-gray-900">기술 스택</h3>
+                <div className="grid grid-cols-2 gap-3 md:gap-4 lg:gap-6">
                   {Object.entries(skills).map(([category, icons], idx) => (
                     <div key={idx}>
-                      <h4 className="text-lg md:text-xl font-bold text-apple-gray-900 mb-4">{category}</h4>
-                      <div className="flex flex-wrap gap-3">
+                      <h4 className="text-xs md:text-sm lg:text-base xl:text-lg font-bold text-apple-gray-900 mb-2 lg:mb-3">{category}</h4>
+                      <div className="flex flex-wrap gap-1.5 md:gap-2 lg:gap-3">
                         {icons.map((icon, iconIdx) => (
                           <div
                             key={iconIdx}
-                            className="w-12 h-12 md:w-14 md:h-14 bg-white rounded-xl p-2 hover:scale-110 hover:bg-gray-50 transition-all duration-300 shadow-md"
+                            className="w-9 h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 xl:w-14 xl:h-14 2xl:w-16 2xl:h-16 bg-white rounded-lg p-1.5 md:p-2 hover:scale-110 hover:bg-gray-50 transition-all duration-300 shadow-sm"
                           >
                             <img src={icon} alt={`${category} icon ${iconIdx}`} className="w-full h-full object-contain" />
                           </div>
@@ -254,29 +255,29 @@ function AboutMe({ onScrollUp, onScrollDown, isActive }) {
               </div>
 
               {/* Education & Certifications */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-2 gap-3 md:gap-4 lg:gap-6">
                 {/* Education */}
-                <div className="bg-white rounded-2xl p-6 shadow-lg">
-                  <h4 className="text-xl font-bold text-apple-gray-900 mb-4">학력</h4>
-                  <div className="space-y-3">
+                <div className="bg-white rounded-xl p-3 md:p-4 lg:p-5 xl:p-6 shadow-md">
+                  <h4 className="text-sm md:text-base lg:text-lg xl:text-xl font-bold text-apple-gray-900 mb-2 md:mb-3">학력</h4>
+                  <div className="space-y-2 md:space-y-3">
                     {education.map((edu, idx) => (
-                      <div key={idx} className="text-sm">
-                        <p className="font-semibold text-apple-gray-900">{edu.school}</p>
-                        <p className="text-apple-gray-600 text-xs">{edu.period}</p>
-                        <p className="text-apple-gray-700 text-xs">{edu.degree}</p>
+                      <div key={idx} className="text-xs md:text-sm lg:text-base">
+                        <p className="font-semibold text-apple-gray-900 leading-tight">{edu.school}</p>
+                        <p className="text-apple-gray-600 text-[10px] md:text-xs">{edu.period}</p>
+                        <p className="text-apple-gray-700 text-[10px] md:text-xs">{edu.degree}</p>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 {/* Certifications */}
-                <div className="bg-white rounded-2xl p-6 shadow-lg">
-                  <h4 className="text-xl font-bold text-apple-gray-900 mb-4">자격증</h4>
-                  <div className="space-y-3">
+                <div className="bg-white rounded-xl p-3 md:p-4 lg:p-5 xl:p-6 shadow-md">
+                  <h4 className="text-sm md:text-base lg:text-lg xl:text-xl font-bold text-apple-gray-900 mb-2 md:mb-3">자격증</h4>
+                  <div className="space-y-2 md:space-y-3">
                     {certifications.map((cert, idx) => (
-                      <div key={idx} className="text-sm">
+                      <div key={idx} className="text-xs md:text-sm lg:text-base">
                         <p className="font-semibold text-apple-gray-900">{cert.name}</p>
-                        <p className="text-apple-gray-600 text-xs">{cert.date}</p>
+                        <p className="text-apple-gray-600 text-[10px] md:text-xs">{cert.date}</p>
                       </div>
                     ))}
                   </div>
@@ -286,10 +287,10 @@ function AboutMe({ onScrollUp, onScrollDown, isActive }) {
           </div>
 
           {/* Scroll Indicator */}
-          <div className="text-center pb-8 pt-16">
+          <div className="text-center pb-3 pt-4 md:pb-4 md:pt-6 lg:pb-6 lg:pt-8">
             <div className="inline-flex flex-col items-center text-apple-gray-600">
               <svg
-                className="w-6 h-6 animate-bounce"
+                className="w-5 h-5 md:w-6 md:h-6 animate-bounce"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
