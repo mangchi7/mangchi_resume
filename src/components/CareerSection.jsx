@@ -1,8 +1,9 @@
 import { useRef, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 function CareerSection({ onScrollUp, isActive }) {
   const contentRef = useRef(null);
-  const [expandedCards, setExpandedCards] = useState({});
+  const [selectedCareer, setSelectedCareer] = useState(null);
 
   const careers = [
     {
@@ -175,14 +176,38 @@ function CareerSection({ onScrollUp, isActive }) {
     };
   }, [isActive, onScrollUp]);
 
-  const toggleCard = (index) => {
-    setExpandedCards(prev => ({
-      ...prev,
-      [index]: !prev[index]
-    }));
+  const openModal = (career) => {
+    setSelectedCareer(career);
   };
 
+  const closeModal = () => {
+    setSelectedCareer(null);
+  };
+
+  // ESC 키로 모달 닫기 & body 스크롤 방지
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === 'Escape' && selectedCareer) {
+        closeModal();
+      }
+    };
+
+    // 모달이 열릴 때 body 스크롤 방지
+    if (selectedCareer) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    window.addEventListener('keydown', handleEsc);
+    return () => {
+      window.removeEventListener('keydown', handleEsc);
+      document.body.style.overflow = '';
+    };
+  }, [selectedCareer]);
+
   return (
+    <>
     <div
       id="career"
       className="bg-white relative border-t-8 border-apple-gray-900"
@@ -202,112 +227,53 @@ function CareerSection({ onScrollUp, isActive }) {
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-apple-gray-900">Career</h2>
         </div>
 
-        <div className="container mx-auto px-6 py-20 max-w-6xl mt-16">
-          {/* Timeline */}
-          <div className="space-y-6">
-            {careers.map((career, idx) => {
-              const isExpanded = expandedCards[idx];
+        <div className="container mx-auto px-4 md:px-8 lg:px-12 xl:px-16 py-12 md:py-16 lg:py-20 max-w-[95%] xl:max-w-[85%] 2xl:max-w-[1800px] mt-8 md:mt-12 lg:mt-16">
+          {/* Grid Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
+            {careers.map((career, idx) => (
+              <div
+                key={idx}
+                onClick={() => openModal(career)}
+                className={`bg-gradient-to-br ${career.color} rounded-2xl md:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer transform hover:scale-105 p-6 md:p-8 lg:p-10`}
+              >
+                <div className="flex flex-col h-full">
+                  {/* Company Name */}
+                  <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-apple-gray-900 mb-3 md:mb-4">
+                    {career.company}
+                  </h3>
 
-              return (
-                <div
-                  key={idx}
-                  className={`bg-gradient-to-br ${career.color} rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden`}
-                >
-                  {/* Header - Always Visible */}
-                  <div className="p-4 md:p-6 lg:p-8">
-                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
-                      <div className="flex-1">
-                        <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-apple-gray-900 mb-2">
-                          {career.company}
-                        </h3>
-                        <p className="text-base md:text-lg font-semibold text-apple-gray-700 mb-2">{career.role}</p>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <span className="text-apple-gray-600 font-medium bg-white px-3 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm whitespace-nowrap">
-                          {career.period}
-                        </span>
-                        <button
-                          onClick={() => toggleCard(idx)}
-                          className="w-8 h-8 flex items-center justify-center bg-white rounded-full hover:bg-apple-gray-100 transition-colors duration-200 flex-shrink-0"
-                          aria-label={isExpanded ? '접기' : '펼치기'}
-                        >
-                          <svg
-                            className={`w-5 h-5 text-apple-gray-700 transition-transform duration-300 ${
-                              isExpanded ? 'rotate-180' : ''
-                            }`}
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M19 9l-7 7-7-7"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
-                    <p className="text-sm md:text-base text-apple-gray-600 leading-relaxed">{career.description}</p>
+                  {/* Period */}
+                  <div className="mb-3 md:mb-4">
+                    <span className="inline-block text-apple-gray-600 font-medium bg-white px-4 py-2 rounded-full text-sm md:text-base">
+                      {career.period}
+                    </span>
                   </div>
 
-                  {/* Expandable Content */}
-                  <div
-                    className={`transition-all duration-300 ease-in-out ${
-                      isExpanded ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
-                    }`}
-                    style={{ overflow: 'hidden' }}
-                  >
-                    <div className="px-4 md:px-6 lg:px-8 pb-4 md:pb-6 lg:pb-8">
-                      {/* Achievements */}
-                      <div className="mb-6">
-                        <h4 className="text-lg md:text-xl font-bold text-apple-gray-900 mb-4 flex items-center">
-                          <svg className="w-5 h-5 md:w-6 md:h-6 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path
-                              fillRule="evenodd"
-                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          주요 성과
-                        </h4>
-                        <ul className="space-y-2 md:space-y-3">
-                          {career.achievements.map((achievement, achIdx) => (
-                            <li key={achIdx} className="flex items-start">
-                              <span className="text-apple-gray-500 mr-2 md:mr-3 mt-1 text-sm">▪</span>
-                              <span className="text-sm md:text-base text-apple-gray-700 leading-relaxed">{achievement}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                  {/* Role */}
+                  <p className="text-base md:text-lg lg:text-xl font-semibold text-apple-gray-700 mt-auto">
+                    {career.role}
+                  </p>
 
-                      {/* Tags */}
-                      <div className="flex flex-wrap gap-1.5 md:gap-2">
-                        {career.tags.map((tag, tagIdx) => (
-                          <span
-                            key={tagIdx}
-                            className="px-3 md:px-4 py-1.5 md:py-2 bg-white text-apple-gray-700 rounded-full text-xs md:text-sm font-medium shadow-sm hover:shadow-md transition-shadow duration-200"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
+                  {/* Click Indicator */}
+                  <div className="mt-4 flex items-center text-apple-gray-600 text-sm">
+                    <span>상세보기</span>
+                    <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
                   </div>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
 
           {/* Back to Top */}
-          <div className="text-center mt-16 pb-8">
+          <div className="text-center mt-8 md:mt-12 lg:mt-16 pb-6 md:pb-8">
             <button
               onClick={() => onScrollUp && onScrollUp()}
-              className="inline-flex items-center gap-2 text-apple-gray-600 hover:text-apple-gray-900 transition-colors font-medium cursor-pointer"
+              className="inline-flex items-center gap-2 text-apple-gray-600 hover:text-apple-gray-900 transition-colors text-sm md:text-base lg:text-lg font-medium cursor-pointer"
             >
               <svg
-                className="w-5 h-5"
+                className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -324,7 +290,95 @@ function CareerSection({ onScrollUp, isActive }) {
           </div>
         </div>
       </div>
+
     </div>
+
+      {/* Modal - Rendered via Portal to body */}
+      {selectedCareer && createPortal(
+        <div
+          className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-3 md:p-4"
+          style={{ zIndex: 9999 }}
+          onClick={closeModal}
+        >
+          <div
+            className="bg-white rounded-2xl md:rounded-3xl w-full max-w-[95vw] md:max-w-3xl lg:max-w-4xl max-h-[92vh] md:max-h-[90vh] overflow-y-auto shadow-2xl transform transition-all animate-fade-in"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className={`bg-gradient-to-br ${selectedCareer.color} p-4 md:p-6 lg:p-8 sticky top-0 z-10`}>
+              <div className="flex justify-between items-start gap-2 md:gap-4 mb-3 md:mb-4">
+                <div className="flex-1 min-w-0">
+                  <h2 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-apple-gray-900 mb-2 md:mb-3 break-words">
+                    {selectedCareer.company}
+                  </h2>
+                  <p className="text-base md:text-lg lg:text-xl font-semibold text-apple-gray-700 mb-2">
+                    {selectedCareer.role}
+                  </p>
+                  <span className="inline-block text-apple-gray-600 font-medium bg-white px-3 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm lg:text-base">
+                    {selectedCareer.period}
+                  </span>
+                </div>
+                <button
+                  onClick={closeModal}
+                  className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-white rounded-full hover:bg-apple-gray-100 transition-colors flex-shrink-0"
+                  aria-label="닫기"
+                >
+                  <svg className="w-5 h-5 md:w-6 md:h-6 text-apple-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <p className="text-xs md:text-sm lg:text-base xl:text-lg text-apple-gray-600 leading-relaxed">
+                {selectedCareer.description}
+              </p>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-4 md:p-6 lg:p-8">
+              {/* Achievements */}
+              <div className="mb-6 md:mb-8">
+                <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-apple-gray-900 mb-3 md:mb-4 lg:mb-5 flex items-center">
+                  <svg className="w-5 h-5 md:w-6 md:h-6 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  주요 성과
+                </h3>
+                <ul className="space-y-2 md:space-y-3">
+                  {selectedCareer.achievements.map((achievement, idx) => (
+                    <li key={idx} className="flex items-start">
+                      <span className="text-apple-gray-500 mr-2 md:mr-3 mt-0.5 md:mt-1 text-sm md:text-base flex-shrink-0">▪</span>
+                      <span className="text-xs md:text-sm lg:text-base xl:text-lg text-apple-gray-700 leading-relaxed break-words">
+                        {achievement}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Tags */}
+              <div>
+                <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-apple-gray-900 mb-3 md:mb-4 lg:mb-5">기술 스택</h3>
+                <div className="flex flex-wrap gap-1.5 md:gap-2 lg:gap-3">
+                  {selectedCareer.tags.map((tag, idx) => (
+                    <span
+                      key={idx}
+                      className="px-2.5 md:px-3 lg:px-4 py-1.5 md:py-2 bg-apple-gray-100 text-apple-gray-700 rounded-full text-xs md:text-sm lg:text-base font-medium hover:bg-apple-gray-200 transition-colors"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+    </>
   );
 }
 
