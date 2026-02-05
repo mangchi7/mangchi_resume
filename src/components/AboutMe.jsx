@@ -1,7 +1,10 @@
 import { useRef, useEffect } from 'react';
+import characterImage from '../assets/re.png';
 
 function AboutMe({ onScrollUp, onScrollDown, isActive }) {
   const contentRef = useRef(null);
+
+  const hashtags = ['#10년차', '#풀스택', '#금융권', '#바이브코딩'];
 
   const info = [
     { label: '이름', value: '서명세' },
@@ -9,6 +12,17 @@ function AboutMe({ onScrollUp, onScrollDown, isActive }) {
     { label: '이메일', value: 'dlsdus101@hanmail.net', link: 'mailto:dlsdus101@hanmail.net' },
     { label: '전화번호', value: '010-3343-9871', link: 'tel:010-3343-9871' },
     { label: 'GitHub', value: 'github.com/mangchi7', link: 'https://github.com/mangchi7' },
+  ];
+
+  const education = [
+    { school: '학점은행제 컴퓨터공학과', period: '2018.06 - 2019.02', degree: '학사 졸업' },
+    { school: '신구대학 컴퓨터정보처리학과', period: '2009.03 - 2015.02', degree: '전문학사 졸업' },
+  ];
+
+  const certifications = [
+    { name: '빅데이터분석기사', date: '2025.07' },
+    { name: 'SQLD', date: '2024.06' },
+    { name: '정보처리기사', date: '2019.08' },
   ];
 
   const skills = {
@@ -41,16 +55,6 @@ function AboutMe({ onScrollUp, onScrollDown, isActive }) {
     ],
   };
 
-  const education = [
-    { school: '학점은행제 컴퓨터공학과', period: '2018.06 - 2019.02', degree: '학사 졸업' },
-    { school: '신구대학 컴퓨터정보처리학과', period: '2009.03 - 2015.02', degree: '전문학사 졸업' },
-  ];
-
-  const certifications = [
-    { name: '빅데이터분석기사', date: '2025.07' },
-    { name: 'SQLD', date: '2024.06' },
-    { name: '정보처리기사', date: '2019.08' },
-  ];
 
   useEffect(() => {
     if (!isActive) return;
@@ -156,101 +160,133 @@ function AboutMe({ onScrollUp, onScrollDown, isActive }) {
       >
         {/* Section Label - Top Right */}
         <div className="absolute top-4 md:top-8 right-4 md:right-8 text-right z-10">
-          <p className="text-apple-gray-400 text-xs md:text-sm font-medium tracking-widest uppercase mb-1">Section 02</p>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-apple-gray-900">About Me</h2>
         </div>
 
-        <div className="container mx-auto px-6 py-20 max-w-5xl mt-16">
-          {/* Introduction */}
-          <div className="mb-16 fade-in-delay-1">
-            <p className="text-lg md:text-xl lg:text-2xl text-center text-apple-gray-700 leading-relaxed max-w-3xl mx-auto px-4">
-              10년차 풀스택 개발자로, 금융권에서 프리랜서로 일해왔습니다.
-              빠른 의사결정과 실행력을 바탕으로 비즈니스 임팩트를 만드는 것에 관심이 많으며,
-              기술 부채 관리와 팀 생산성 향상에도 기여해왔습니다.
-              최근에는 AI/ML 기술을 활용한 서비스 개발에도 참여하고 있습니다.
-            </p>
-          </div>
+        <div className="container mx-auto px-6 py-20 max-w-7xl mt-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            {/* Left Column - Character Image */}
+            <div className="flex flex-col items-center justify-center fade-in-delay-1 space-y-8">
+              <div className="relative">
+                <img
+                  src={characterImage}
+                  alt="Character"
+                  className="w-64 h-64 md:w-80 md:h-80 object-contain"
+                />
+              </div>
 
-          {/* Basic Info */}
-          <div className="mb-16 fade-in-delay-2 px-4">
-            <h3 className="text-2xl md:text-3xl font-bold text-apple-gray-900 mb-6 md:mb-8 text-center">기본 정보</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 max-w-3xl mx-auto">
-              {info.map((item, idx) => (
-                <div key={idx} className="bg-apple-gray-50 rounded-xl p-4 md:p-6">
-                  <p className="text-apple-gray-600 text-xs md:text-sm mb-1 md:mb-2">{item.label}</p>
-                  {item.link ? (
-                    <a
-                      href={item.link}
-                      target={item.link.startsWith('http') ? '_blank' : undefined}
-                      rel={item.link.startsWith('http') ? 'noopener noreferrer' : undefined}
-                      className="text-apple-gray-900 font-semibold text-base md:text-lg hover:text-apple-gray-600 transition-colors break-all"
-                    >
-                      {item.value}
-                    </a>
-                  ) : (
-                    <p className="text-apple-gray-900 font-semibold text-base md:text-lg">{item.value}</p>
-                  )}
-                </div>
-              ))}
+              {/* Hashtags */}
+              <div className="flex flex-wrap gap-3 justify-center">
+                {hashtags.map((tag, idx) => (
+                  <span
+                    key={idx}
+                    className="px-4 py-2 bg-apple-gray-900 text-white rounded-full text-sm font-medium hover:bg-apple-gray-700 transition-colors"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              {/* Link Button */}
+              <a
+                href="https://github.com/mangchi7"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-8 py-3 bg-apple-gray-900 text-white rounded-full font-semibold hover:bg-apple-gray-700 transition-all duration-300 shadow-lg"
+              >
+                링크 바로 보기
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </a>
             </div>
-          </div>
 
-          {/* Skills */}
-          <div className="mb-16 fade-in-delay-3 px-4">
-            <h3 className="text-2xl md:text-3xl font-bold text-apple-gray-900 mb-6 md:mb-8 text-center">기술 스택</h3>
-            <div className="space-y-6 md:space-y-8">
-              {Object.entries(skills).map(([category, icons], idx) => (
-                <div key={idx} className="text-center">
-                  <h4 className="text-lg md:text-xl font-semibold text-apple-gray-700 mb-3 md:mb-4">{category}</h4>
-                  <div className="flex flex-wrap justify-center gap-4 md:gap-6">
-                    {icons.map((icon, iconIdx) => (
-                      <div
-                        key={iconIdx}
-                        className="w-10 h-10 md:w-12 md:h-12 lg:w-16 lg:h-16 hover:scale-110 transition-transform duration-300"
-                      >
-                        <img src={icon} alt={`${category} icon ${iconIdx}`} className="w-full h-full object-contain" />
+            {/* Right Column - Content */}
+            <div className="text-apple-gray-900 space-y-12 fade-in-delay-2">
+              {/* Mind Section */}
+              <div>
+                <h3 className="text-3xl md:text-4xl font-bold mb-6 text-apple-gray-900">마음가짐</h3>
+                <div className="space-y-6">
+                  <div>
+                    <p className="text-lg md:text-xl text-apple-gray-700 leading-relaxed mb-4">
+                      <span className="font-semibold text-apple-gray-900">끈기와 인내심</span>
+                    </p>
+                    <p className="text-base text-apple-gray-600 leading-relaxed">
+                      마지막까지 끈기와 인내심이 필요한 마라톤을 취미로 즐기고 있습니다.<br/>
+                      그래서 개발 중 예상치 못한 문제가 발생하더라도 포기하지 않고 끝까지 해결해 완료하는 것을 중요하게 생각합니다.<br/>
+                      과정은 쉽지 않지만 완주하듯 결과를 만들어냈을 때 느끼는 성취감을 중요하게 생각합니다.<br/>
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-lg md:text-xl text-apple-gray-700 leading-relaxed mb-4">
+                      <span className="font-semibold text-apple-gray-900">팀보다 위대한 선수는 없다.</span>
+                    </p>
+                    <p className="text-base text-apple-gray-600 leading-relaxed">
+                      아무리 뛰어난 개인이라도 혼자서는 한계가 있다고 생각합니다.<br/>
+                      여러 사람이 함께 고민하고 방향을 맞춰가는 집단지성의 과정 속에서 더 나은 결과가 나온다고 믿습니다.<br/>
+                      저는 팀 안에서 원활한 소통과 역할 조율을 통해 시너지를 만들어내는 협업 중심의 개발자입니다.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Skill & Tools Section */}
+              <div>
+                <h3 className="text-3xl md:text-4xl font-bold mb-8 text-apple-gray-900">기술 스택</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {Object.entries(skills).map(([category, icons], idx) => (
+                    <div key={idx}>
+                      <h4 className="text-lg md:text-xl font-bold text-apple-gray-900 mb-4">{category}</h4>
+                      <div className="flex flex-wrap gap-3">
+                        {icons.map((icon, iconIdx) => (
+                          <div
+                            key={iconIdx}
+                            className="w-12 h-12 md:w-14 md:h-14 bg-white rounded-xl p-2 hover:scale-110 hover:bg-gray-50 transition-all duration-300 shadow-md"
+                          >
+                            <img src={icon} alt={`${category} icon ${iconIdx}`} className="w-full h-full object-contain" />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Education & Certifications */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Education */}
+                <div className="bg-white rounded-2xl p-6 shadow-lg">
+                  <h4 className="text-xl font-bold text-apple-gray-900 mb-4">학력</h4>
+                  <div className="space-y-3">
+                    {education.map((edu, idx) => (
+                      <div key={idx} className="text-sm">
+                        <p className="font-semibold text-apple-gray-900">{edu.school}</p>
+                        <p className="text-apple-gray-600 text-xs">{edu.period}</p>
+                        <p className="text-apple-gray-700 text-xs">{edu.degree}</p>
                       </div>
                     ))}
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
 
-          {/* Education & Certifications */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mb-16 px-4">
-            {/* Education */}
-            <div>
-              <h3 className="text-xl md:text-2xl font-bold text-apple-gray-900 mb-4 md:mb-6">학력</h3>
-              <div className="space-y-3 md:space-y-4">
-                {education.map((edu, idx) => (
-                  <div key={idx} className="bg-apple-gray-50 rounded-xl p-4 md:p-6">
-                    <h4 className="font-semibold text-apple-gray-900 mb-2 text-sm md:text-base">{edu.school}</h4>
-                    <p className="text-apple-gray-600 text-xs md:text-sm mb-1">{edu.period}</p>
-                    <p className="text-apple-gray-700 text-sm md:text-base">{edu.degree}</p>
+                {/* Certifications */}
+                <div className="bg-white rounded-2xl p-6 shadow-lg">
+                  <h4 className="text-xl font-bold text-apple-gray-900 mb-4">자격증</h4>
+                  <div className="space-y-3">
+                    {certifications.map((cert, idx) => (
+                      <div key={idx} className="text-sm">
+                        <p className="font-semibold text-apple-gray-900">{cert.name}</p>
+                        <p className="text-apple-gray-600 text-xs">{cert.date}</p>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Certifications */}
-            <div>
-              <h3 className="text-xl md:text-2xl font-bold text-apple-gray-900 mb-4 md:mb-6">자격증</h3>
-              <div className="space-y-3 md:space-y-4">
-                {certifications.map((cert, idx) => (
-                  <div key={idx} className="bg-apple-gray-50 rounded-xl p-4 md:p-6 flex justify-between items-center">
-                    <h4 className="font-semibold text-apple-gray-900 text-sm md:text-base">{cert.name}</h4>
-                    <span className="text-apple-gray-600 text-xs md:text-sm bg-white px-2 md:px-3 py-1 rounded-full whitespace-nowrap ml-2">
-                      {cert.date}
-                    </span>
-                  </div>
-                ))}
+                </div>
               </div>
             </div>
           </div>
 
           {/* Scroll Indicator */}
-          <div className="text-center pb-8">
+          <div className="text-center pb-8 pt-16">
             <div className="inline-flex flex-col items-center text-apple-gray-600">
               <svg
                 className="w-6 h-6 animate-bounce"

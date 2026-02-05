@@ -126,21 +126,41 @@ function MainHero({ onScrollDown, isActive }) {
     <div
       id="main"
       ref={sectionRef}
-      className="flex flex-col items-center justify-center bg-gradient-to-b from-apple-gray-50 to-white relative"
+      className="flex flex-col items-center justify-center relative overflow-hidden"
       style={{ height: '100vh', width: '100%' }}
     >
-      {/* Section Label - Top Right */}
-      
-      <div className="container mx-auto px-6 text-center relative">
+      {/* Marble Background */}
+      <div className="absolute inset-0 z-0">
+        <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="marble">
+              <feTurbulence type="fractalNoise" baseFrequency="0.02 0.03" numOctaves="3" seed="2" />
+              <feColorMatrix type="saturate" values="0" />
+              <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.4 0" />
+            </filter>
+            <linearGradient id="marbleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style={{ stopColor: '#f9fafb', stopOpacity: 1 }} />
+              <stop offset="25%" style={{ stopColor: '#f3f4f6', stopOpacity: 1 }} />
+              <stop offset="50%" style={{ stopColor: '#e5e7eb', stopOpacity: 1 }} />
+              <stop offset="75%" style={{ stopColor: '#f3f4f6', stopOpacity: 1 }} />
+              <stop offset="100%" style={{ stopColor: '#ffffff', stopOpacity: 1 }} />
+            </linearGradient>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#marbleGradient)" />
+          <rect width="100%" height="100%" filter="url(#marble)" opacity="0.6" />
+        </svg>
+      </div>
+
+      <div className="container mx-auto px-6 text-center relative z-10">
         {/* Background Text - FULL-STACK */}
         {currentPhase === 2 && (
-          <div className="absolute left-0 right-0 flex items-center justify-center pointer-events-none overflow-hidden" style={{ zIndex: 0, top: 'clamp(-30px, -3vw, -48px)' }}>
+          <div className={`absolute left-0 right-0 flex items-center justify-center pointer-events-none overflow-hidden ${showSecondary ? 'scale-in' : 'opacity-0'}`} style={{ zIndex: 0, top: 'clamp(-30px, -3vw, -48px)' }}>
             <span
               className="font-bold text-apple-gray-900 whitespace-nowrap select-none"
               style={{
-                fontSize: 'clamp(3rem, 15vw, 12rem)',
-                opacity: 0.08,
-                letterSpacing: '0.05em'
+                fontSize: 'clamp(3rem, 15vw, 9rem)',
+                opacity: 0.15,
+                letterSpacing: '0.05em',
               }}
             >
               FULL-STACK
