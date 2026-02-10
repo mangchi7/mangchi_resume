@@ -71,7 +71,7 @@ function MainHero({ onScrollDown, isActive }) {
     let touchEndY = 0;
 
     const handleWheel = (e) => {
-      if (isTransitioning) {
+      if (isTransitioning || !showSecondary) {
         e.preventDefault();
         return;
       }
@@ -95,7 +95,7 @@ function MainHero({ onScrollDown, isActive }) {
     };
 
     const handleTouchEnd = () => {
-      if (isTransitioning) return;
+      if (isTransitioning || !showSecondary) return;
 
       const deltaY = touchStartY - touchEndY;
 
@@ -120,7 +120,7 @@ function MainHero({ onScrollDown, isActive }) {
       section.removeEventListener('touchmove', handleTouchMove);
       section.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [isActive, onScrollDown]);
+  }, [isActive, onScrollDown, showSecondary]);
 
   return (
     <div
@@ -169,7 +169,7 @@ function MainHero({ onScrollDown, isActive }) {
         )}
 
         {/* Typing Text */}
-        <h1 className="relative z-10 text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-apple-gray-900 mb-8 md:mb-12 min-h-[120px] md:min-h-[160px] flex items-center justify-center px-4" style={{ paddingTop: 'clamp(2rem, 5vw, 5rem)' }}>
+        <h1 className="relative z-10 text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-apple-gray-900 mb-8 md:mb-12 min-h-[60px] md:min-h-[160px] flex items-center justify-center px-4 whitespace-nowrap" style={{ paddingTop: 'clamp(2rem, 5vw, 5rem)' }}>
           <span className={currentPhase < 2 ? 'typing-cursor' : ''}>
             {currentPhase === 2 ? (
               <>

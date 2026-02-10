@@ -76,7 +76,7 @@ function AboutMe({ onScrollUp, onScrollDown, isActive }) {
       const scrollHeight = content.scrollHeight;
       const clientHeight = content.clientHeight;
       const isAtTop = scrollTop <= 1;
-      const isAtBottom = Math.abs(scrollHeight - clientHeight - scrollTop) < 5;
+      const isAtBottom = Math.abs(scrollHeight - clientHeight - scrollTop) < 30;
 
       // Scrolling down at bottom
       if (e.deltaY > 0 && isAtBottom && onScrollDown) {
@@ -112,7 +112,7 @@ function AboutMe({ onScrollUp, onScrollDown, isActive }) {
       const scrollHeight = content.scrollHeight;
       const clientHeight = content.clientHeight;
       const isAtTop = scrollTop <= 1;
-      const isAtBottom = Math.abs(scrollHeight - clientHeight - scrollTop) < 5;
+      const isAtBottom = Math.abs(scrollHeight - clientHeight - scrollTop) < 30;
 
       // Swipe up at bottom (scroll down to next section)
       if (deltaY > 50 && isAtBottom && onScrollDown) {
