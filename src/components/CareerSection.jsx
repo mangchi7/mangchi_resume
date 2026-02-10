@@ -134,7 +134,7 @@ function CareerSection({ onScrollUp, onScrollDown, isActive }) {
       const scrollHeight = content.scrollHeight;
       const clientHeight = content.clientHeight;
       const isAtTop = scrollTop <= 1;
-      const isAtBottom = scrollHeight - clientHeight - scrollTop < 50;
+      const isAtBottom = scrollHeight - clientHeight - scrollTop < 5;
 
       // Scrolling down at bottom
       if (e.deltaY > 0 && isAtBottom && onScrollDown) {
@@ -161,10 +161,6 @@ function CareerSection({ onScrollUp, onScrollDown, isActive }) {
       touchStartScrollTop = content.scrollTop;
     };
 
-    const handleTouchMove = () => {
-      // Track touch movement for smoother gesture detection
-    };
-
     const handleTouchEnd = (e) => {
       if (isTransitioning) return;
 
@@ -173,44 +169,42 @@ function CareerSection({ onScrollUp, onScrollDown, isActive }) {
       const scrollTop = content.scrollTop;
       const scrollHeight = content.scrollHeight;
       const clientHeight = content.clientHeight;
-      const isAtTop = scrollTop <= 1;
-      const isAtBottom = scrollHeight - clientHeight - scrollTop < 50;
 
-      // 스크롤이 끝에 있고, 추가로 스와이프 제스처가 감지된 경우
+      // 터치 시작 시점에 끝에 있었는지 확인
+      const wasAtTop = touchStartScrollTop <= 1;
+      const wasAtBottom = scrollHeight - clientHeight - touchStartScrollTop < 5;
+
+      // 터치 종료 시점에 끝에 있는지 확인
+      const isAtTop = scrollTop <= 1;
+      const isAtBottom = scrollHeight - clientHeight - scrollTop < 5;
+
       // Swipe up at bottom (scroll down to next section)
-      if (isAtBottom && deltaY > 30 && onScrollDown) {
-        // 스크롤이 더 이상 움직이지 않는 상태에서의 스와이프도 감지
-        const scrollDidNotMove = Math.abs(scrollTop - touchStartScrollTop) < 5;
-        if (scrollDidNotMove || scrollTop === touchStartScrollTop) {
-          isTransitioning = true;
-          onScrollDown();
-          setTimeout(() => {
-            isTransitioning = false;
-          }, 1000);
-        }
+      // 시작과 끝 모두 하단에 있고, 위로 스와이프한 경우
+      if (wasAtBottom && isAtBottom && deltaY > 30 && onScrollDown) {
+        isTransitioning = true;
+        onScrollDown();
+        setTimeout(() => {
+          isTransitioning = false;
+        }, 1000);
       }
       // Swipe down at top (scroll up to previous section)
-      else if (isAtTop && deltaY < -30 && onScrollUp) {
-        const scrollDidNotMove = Math.abs(scrollTop - touchStartScrollTop) < 5;
-        if (scrollDidNotMove || scrollTop === touchStartScrollTop) {
-          isTransitioning = true;
-          onScrollUp();
-          setTimeout(() => {
-            isTransitioning = false;
-          }, 1000);
-        }
+      // 시작과 끝 모두 상단에 있고, 아래로 스와이프한 경우
+      else if (wasAtTop && isAtTop && deltaY < -30 && onScrollUp) {
+        isTransitioning = true;
+        onScrollUp();
+        setTimeout(() => {
+          isTransitioning = false;
+        }, 1000);
       }
     };
 
     content.addEventListener('wheel', handleWheel, { passive: false });
     content.addEventListener('touchstart', handleTouchStart, { passive: true });
-    content.addEventListener('touchmove', handleTouchMove, { passive: true });
     content.addEventListener('touchend', handleTouchEnd, { passive: true });
 
     return () => {
       content.removeEventListener('wheel', handleWheel);
       content.removeEventListener('touchstart', handleTouchStart);
-      content.removeEventListener('touchmove', handleTouchMove);
       content.removeEventListener('touchend', handleTouchEnd);
     };
   }, [isActive, onScrollUp, onScrollDown]);
